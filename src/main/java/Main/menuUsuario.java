@@ -378,8 +378,8 @@ public class menuUsuario extends JFrame implements Runnable {
         //BOTON CONSULTA TARJETA
         ConsultasBbdd objConsultaBbdd = new ConsultasBbdd();
         Tarjeta objTarjeta = objConsultaBbdd.getTarjeta(tarjeta);
-            String cvsTarjeta = objTarjeta.getCVS();
-            Date fechaCaducidad = objTarjeta.getFecha_cad();
+        String cvsTarjeta = objTarjeta.getCVS();
+        Date fechaCaducidad = objTarjeta.getFecha_cad();
         new consultaTarjeta(nombre, apellidos, tarjeta, cvsTarjeta, fechaCaducidad).setVisible(true);
         dispose();
     }//GEN-LAST:event_jConsultaTarjetaMouseClicked
@@ -398,29 +398,39 @@ public class menuUsuario extends JFrame implements Runnable {
     private void jSacarDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSacarDineroActionPerformed
         //SACAR DINERO
         ConsultasBbdd cbd = new ConsultasBbdd();
-        Cuenta cuenta = cbd.getCuentaTarjeta(tarjeta); //con esto sabemos la cuenta a la que pertenece el saldo.
-        double dineroSacar = Double.parseDouble(j_RetirarDinero.getText());
-        boolean sacoDinero = cbd.retirarDinero(dineroSacar, cuenta);
-        if (dineroSacar > 0 && sacoDinero) {
-            JOptionPane.showMessageDialog(this, "Retirada realizada.");
+        if (j_RetirarDinero.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes introducir una cantidad", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "No se ha podido realizar la retirada.", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
+            Cuenta cuenta = cbd.getCuentaTarjeta(tarjeta); //con esto sabemos la cuenta a la que pertenece el saldo.
+            double dineroSacar = Double.parseDouble(j_RetirarDinero.getText());
+            boolean sacoDinero = cbd.retirarDinero(dineroSacar, cuenta);
+
+            if (dineroSacar > 0 && sacoDinero) {
+                JOptionPane.showMessageDialog(this, "Retirada realizada.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se ha podido realizar la retirada.", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
+            }
         }
+
     }//GEN-LAST:event_jSacarDineroActionPerformed
 
     private void jIngresarDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jIngresarDineroActionPerformed
         //RETIRAR DINERO
         ConsultasBbdd cbd = new ConsultasBbdd();
-        Cuenta cuenta = cbd.getCuentaTarjeta(tarjeta); //con esto sabemos la cuenta a la que pertenece el saldo.
-        double dineroIngresar = Double.parseDouble(j_IngresarDinero.getText());
-        boolean ingresoDinero = cbd.ingresarDinero(dineroIngresar, cuenta);
-        if (dineroIngresar > 0 && ingresoDinero) {
-            JOptionPane.showMessageDialog(this, "Ingreso realizado.");
+
+        if (j_IngresarDinero.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Debes introducir una cantidad", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Eres tonto y en serio quieres meter 0€???", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
+            Cuenta cuenta = cbd.getCuentaTarjeta(tarjeta); //con esto sabemos la cuenta a la que pertenece el saldo.
+            double dineroIngresar = Double.parseDouble(j_IngresarDinero.getText());
+            boolean ingresoDinero = cbd.ingresarDinero(dineroIngresar, cuenta);
+
+            if (dineroIngresar > 0 && ingresoDinero) {
+                JOptionPane.showMessageDialog(this, "Ingreso realizado.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Eres tonto y en serio quieres meter 0€???", "ERROR BOBO!", JOptionPane.ERROR_MESSAGE);
+            }
         }
-
-
     }//GEN-LAST:event_jIngresarDineroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

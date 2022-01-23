@@ -18,7 +18,7 @@ import org.apache.commons.validator.routines.CreditCardValidator;
 public class menuMainCajero extends javax.swing.JFrame {
 
     protected Slide slide;
-    protected final String queryTarjeta = "SELECT num_tarjeta, pin, nif_cliente FROM tarjeta WHERE num_tarjeta = ? AND pin = ?";
+    protected final String queryTarjeta = "SELECT numero, pin, nif_cliente FROM tarjeta WHERE numero = ? AND pin = ?";
     protected Movimiento mov;
     protected Proper prop;
     protected Cliente cliente;

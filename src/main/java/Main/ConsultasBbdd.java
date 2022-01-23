@@ -28,8 +28,7 @@ public class ConsultasBbdd {
     public ArrayList<String> infoCliente(String nif) {
         String queryCliente = "SELECT * FROM cliente WHERE nif = ?";
         ArrayList<String> infoList = new ArrayList<>();
-        try {
-            pst = con.prepareStatement(queryCliente);
+        try (PreparedStatement pst = con.prepareStatement(queryCliente)){
             String numeroNif = nif;
             pst.setString(1, numeroNif);
 
@@ -52,7 +51,7 @@ public class ConsultasBbdd {
     }
 
     public Cuenta getCuentaTarjeta(String numeroTarjeta) {
-        String queryCuentaCliente = "SELECT num_cuenta FROM tarjeta WHERE num_tarjeta = ?";
+        String queryCuentaCliente = "SELECT numero_cuenta FROM tarjeta WHERE numero = ?";
         Cuenta objCuenta = new Cuenta();
         try {
             pst = con.prepareStatement(queryCuentaCliente);
@@ -60,7 +59,7 @@ public class ConsultasBbdd {
             pst.setString(1, numeroTarjeta);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    String queryCuenta = "SELECT * FROM cuenta WHERE num_cuenta = ?";
+                    String queryCuenta = "SELECT * FROM cuenta WHERE numero = ?";
                     pst = con.prepareStatement(queryCuenta);
                     String numeroCuenta = rs.getString(1); //num_cuenta
 
@@ -86,10 +85,9 @@ public class ConsultasBbdd {
     }
 
     public Tarjeta getTarjeta(String numeroTarjeta) {
-        String queryTarjeta = "SELECT * FROM tarjeta where num_tarjeta = ?";
+        String queryTarjeta = "SELECT * FROM tarjeta where numero = ?";
         Tarjeta objTarjeta = null;
-        try {
-            pst = con.prepareStatement(queryTarjeta);
+        try (PreparedStatement pst = con.prepareStatement(queryTarjeta)){
             pst.setString(1, numeroTarjeta);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
@@ -107,9 +105,8 @@ public class ConsultasBbdd {
     public boolean retirarDinero(double dineroSacar, Cuenta cuenta) {
         int comprobacion = 0;
         if (cuenta.getSaldo() >= dineroSacar) {
-            String queryUpd = "UPDATE cuenta SET saldo = saldo - ? WHERE num_cuenta = ? ";
-            try {
-                pst = con.prepareStatement(queryUpd);
+            String queryUpd = "UPDATE cuenta SET saldo = saldo - ? WHERE numero = ? ";
+            try (PreparedStatement pst = con.prepareStatement(queryUpd);){
                 pst.setDouble(1, dineroSacar);
                 pst.setString(2, cuenta.getNumero());
                 comprobacion = pst.executeUpdate(); //devuelve el num de registros actualizado.
@@ -122,9 +119,8 @@ public class ConsultasBbdd {
 
     public boolean ingresarDinero(double dineroIngresar, Cuenta cuenta) {
         int comprobacion = 0;
-        String queryUpd = "UPDATE cuenta SET saldo = saldo + ? WHERE num_cuenta = ? ";
-        try {
-            pst = con.prepareStatement(queryUpd);
+        String queryUpd = "UPDATE cuenta SET saldo = saldo + ? WHERE numero = ? ";
+        try (PreparedStatement pst = con.prepareStatement(queryUpd);){          
             pst.setDouble(1, dineroIngresar);
             pst.setString(2, cuenta.getNumero());
             comprobacion = pst.executeUpdate(); //devuelve el num de registros actualizado.
